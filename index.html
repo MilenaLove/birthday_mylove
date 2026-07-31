@@ -285,10 +285,36 @@
 }
 
 .poem-art{
+    position:relative;
+    width:100%;
+    max-width:520px;
+    margin:0 auto;
     border-radius:36px;
     overflow:hidden;
-    background:#1b111a;
-    padding:0;
+    aspect-ratio:3/4;
+}
+
+.poem-art .slide{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:0;
+
+    transition:
+        opacity 1.6s ease,
+        transform 8s ease;
+
+    transform:scale(1.08);
+}
+
+.poem-art .slide.active{
+    opacity:1;
+    transform:scale(1);
 }
 
 .poem-art img{
@@ -297,7 +323,12 @@
     display:block;
     object-fit:cover;
 }
-
+.poem-art img{
+    user-select:none;
+    -webkit-user-select:none;
+    -webkit-user-drag:none;
+    pointer-events:none;
+}
 .poem-art:hover img{
     transform:scale(1.05);
 }
@@ -1036,8 +1067,13 @@
         </div>
         <div class="poem-wrap">
           <div class="poem-art glass">
-            <img src="images/4.png" alt="Милена">
-        </div>
+
+              <img src="images/4.png" class="slide active">
+              <img src="images/5.png" class="slide">
+              <img src="images/6.png" class="slide">
+              <img src="images/7.png" class="slide">
+
+          </div>
           <article class="poem glass">
             <p>Милена — тёплый свет в моём окне,
 Рыжинка солнца в ласковой весне.
@@ -1387,6 +1423,16 @@
   </main>
 
   <script>
+    document.addEventListener('contextmenu', e => {
+    e.preventDefault();
+});
+document.querySelectorAll('img').forEach(img => {
+    img.draggable = false;
+});
+
+document.addEventListener('dragstart', e => {
+    e.preventDefault();
+});
     const $ = (s, root = document) => root.querySelector(s);
     const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 
@@ -1587,7 +1633,22 @@ $('#enterBtn').addEventListener('click', async () => {
       });
       $('#constellation').appendChild(b);
     });
+const slides = document.querySelectorAll('.poem-art .slide');
 
+let currentSlide = 0;
+
+setInterval(() => {
+
+    slides[currentSlide].classList.remove('active');
+
+    currentSlide++;
+
+    if(currentSlide >= slides.length)
+        currentSlide = 0;
+
+    slides[currentSlide].classList.add('active');
+
+}, 5500);
     // Причины
     // Скрытые признания
 // Скрытые признания
